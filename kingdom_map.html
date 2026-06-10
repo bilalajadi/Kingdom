@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Kingdom — Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0a0806; font-family: 'Crimson Text', Georgia, serif; color: #e8dcc8; min-height: 100vh; max-width: 480px; margin: 0 auto; }
+  .header { text-align: center; padding: 16px 16px 10px; border-bottom: 1px solid rgba(201,168,76,0.2); background: #110e08; }
+  .header-eyebrow { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.25em; color: #7a6530; text-transform: uppercase; margin-bottom: 3px; }
+  .header-title { font-family: 'Cinzel', serif; font-size: 19px; font-weight: 700; color: #c9a84c; letter-spacing: 0.06em; }
+  .header-date { font-style: italic; font-size: 12px; color: #5a4c38; margin-top: 2px; }
+  .nav-links { display: flex; justify-content: center; gap: 20px; padding: 9px; background: #110e08; border-bottom: 1px solid rgba(201,168,76,0.12); }
+  .nav-links a { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em; color: #7a6530; text-decoration: none; text-transform: uppercase; }
+  .nav-links a.active { color: #c9a84c; border-bottom: 1px solid #c9a84c; padding-bottom: 2px; }
+  .battle-btn { display: block; margin: 10px 12px 4px; background: #3a0f0f; border: 1px solid #8b2020; border-radius: 6px; padding: 12px; text-align: center; text-decoration: none; }
+  .battle-btn-title { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 0.1em; text-transform: uppercase; }
+  .map-wrap { padding: 10px 12px; }
+  .map-wrap svg { width: 100%; display: block; border: 1px solid rgba(201,168,76,0.12); border-radius: 8px; }
+  .legend { margin: 0 12px 16px; background: #110e08; border: 1px solid rgba(201,168,76,0.12); border-radius: 6px; padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #8a7a68; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 1px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-eyebrow">The Realm</div>
+  <div class="header-title">Kingdom Map</div>
+  <div class="header-date" id="status-date"></div>
+</div>
+<div class="nav-links">
+  <a href="kingdom_map.html" class="active">Kingdom</a>
+  <a href="citadel_map.html">Citadel</a>
+  <a href="kingdom_dashboard.html">Dashboard</a>
+</div>
+<a class="battle-btn" href="https://claude.ai" target="_blank">
+  <div class="battle-btn-title">&#9876; Under attack — open Claude</div>
+</a>
+<div class="map-wrap">
+<svg viewBox="0 0 440 620" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Kingdom Map</title>
+<desc>Fantasy map of all territories with conquest progress and milestone fortresses</desc>
+<defs>
+  <pattern id="grain" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse">
+    <rect width="3" height="3" fill="#12100a"/>
+    <rect x="0" y="0" width="1.5" height="1.5" fill="#161208" opacity="0.5"/>
+  </pattern>
+  <!-- conquest overlay patterns -->
+  <pattern id="conq-green" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+    <rect width="6" height="6" fill="none"/>
+    <line x1="0" y1="3" x2="6" y2="3" stroke="#2d7a5e" stroke-width="0.4" opacity="0.35"/>
+  </pattern>
+  <pattern id="conq-amber" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+    <rect width="6" height="6" fill="none"/>
+    <line x1="0" y1="3" x2="6" y2="3" stroke="#b8760a" stroke-width="0.4" opacity="0.3"/>
+  </pattern>
+  <pattern id="conq-red" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+    <rect width="6" height="6" fill="none"/>
+    <line x1="0" y1="3" x2="6" y2="3" stroke="#8b2020" stroke-width="0.4" opacity="0.3"/>
+  </pattern>
+</defs>
+
+<!-- OCEAN -->
+<rect width="440" height="620" fill="#0a0f18"/>
+<!-- ocean texture -->
+<path d="M0,100 Q110,90 220,105 Q330,118 440,100" fill="none" stroke="#0d1520" stroke-width="1" opacity="0.6"/>
+<path d="M0,200 Q90,190 180,205 Q300,222 440,198" fill="none" stroke="#0d1520" stroke-width="1" opacity="0.5"/>
+<path d="M0,350 Q150,338 260,352 Q350,362 440,348" fill="none" stroke="#0d1520" stroke-width="1" opacity="0.4"/>
+<path d="M0,490 Q120,478 230,494 Q340,506 440,490" fill="none" stroke="#0d1520" stroke-width="1" opacity="0.4"/>
+
+<!-- MAIN CONTINENT — irregular, fills most of map -->
+<path d="M55,15 L130,8 L210,5 L300,10 L370,22 L408,55 L425,110 L430,175 L428,255 L420,330 L415,400 L400,455 L375,505 L340,545 L295,578 L245,595 L190,598 L145,588 L105,565 L72,535 L45,498 L25,450 L15,390 L10,320 L12,250 L18,180 L28,115 L40,65 Z"
+  fill="#1c1810" stroke="#2e2818" stroke-width="1.2"/>
+
+<!-- NORTHERN ISLAND -->
+<path d="M10,40 L38,32 L52,42 L48,62 L28,68 L10,58 Z" fill="#1c1810" stroke="#2e2818" stroke-width="1"/>
+<!-- EASTERN ISLAND cluster -->
+<path d="M415,300 L438,288 L445,308 L435,322 L415,318 Z" fill="#1c1810" stroke="#2e2818" stroke-width="0.8"/>
+<path d="M425,345 L442,338 L448,355 L438,364 L422,360 Z" fill="#1c1810" stroke="#2e2818" stroke-width="0.8"/>
+<!-- SOUTHERN ISLAND -->
+<path d="M160,608 L215,602 L240,612 L230,625 L180,628 L155,618 Z" fill="#1c1810" stroke="#2e2818" stroke-width="0.8"/>
+<!-- WESTERN INLET -->
+<path d="M8,250 L22,242 L28,260 L18,272 L6,264 Z" fill="#0a0f18"/>
+
+<!-- ============ WORK TERRITORY — north, massive ============ -->
+<path d="M55,15 L210,5 L370,22 L408,55 L425,110 L418,170 L390,195 L340,210 L270,218 L200,220 L140,215 L90,200 L55,175 L35,140 L30,95 L38,55 Z"
+  fill="#182a18" stroke="#3a6a3a" stroke-width="1.2"/>
+<!-- conquest overlay — work 55% conquered -->
+<path d="M55,15 L210,5 L310,12 L380,35 L408,55 L415,95 L400,140 L360,170 L290,185 L210,188 L145,182 L95,168 L62,148 L45,118 L42,80 L48,45 Z"
+  fill="url(#conq-green)" opacity="0.9"/>
+<path d="M55,15 L210,5 L310,12 L380,35 L408,55 L415,95 L400,140 L360,170 L290,185 L210,188 L145,182 L95,168 L62,148 L45,118 L42,80 L48,45 Z"
+  fill="#1d7a4a" opacity="0.08"/>
+<!-- border of conquered zone -->
+<path d="M55,15 L210,5 L310,12 L380,35 L408,55 L415,95 L400,140 L360,170 L290,185 L210,188 L145,182 L95,168 L62,148 L45,118 L42,80 L48,45 Z"
+  fill="none" stroke="#2d7a5e" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.5"/>
+<text x="215" y="75" text-anchor="middle" fill="#5aaa5a" font-family="'Cinzel',serif" font-size="15" font-weight="bold" letter-spacing="0.08em">WORK</text>
+<text x="215" y="93" text-anchor="middle" fill="#2d6a2d" font-family="'Crimson Text',serif" font-size="10" font-style="italic">income &amp; conquest — 55% held</text>
+<!-- mountain range work -->
+<polygon points="310,130 318,115 326,130" fill="none" stroke="#2a4a2a" stroke-width="0.8"/>
+<polygon points="325,130 331,118 337,130" fill="none" stroke="#2a4a2a" stroke-width="0.8"/>
+<polygon points="155,122 162,108 169,122" fill="none" stroke="#2a4a2a" stroke-width="0.8"/>
+<polygon points="170,122 176,110 182,122" fill="none" stroke="#2a4a2a" stroke-width="0.8"/>
+<polygon points="230,108 237,95 244,108" fill="none" stroke="#2a4a2a" stroke-width="0.8"/>
+<!-- trees work -->
+<line x1="100" y1="155" x2="100" y2="168" stroke="#1d5a3a" stroke-width="0.7"/>
+<circle cx="100" cy="152" r="4" fill="none" stroke="#1d5a3a" stroke-width="0.7"/>
+<line x1="115" y1="150" x2="115" y2="163" stroke="#1d5a3a" stroke-width="0.7"/>
+<circle cx="115" cy="147" r="4" fill="none" stroke="#1d5a3a" stroke-width="0.7"/>
+<line x1="355" y1="148" x2="355" y2="161" stroke="#1d5a3a" stroke-width="0.7"/>
+<circle cx="355" cy="145" r="4" fill="none" stroke="#1d5a3a" stroke-width="0.7"/>
+<!-- WORK milestones — 5 fortresses -->
+<g opacity="0.9"><!-- conquered -->
+  <rect x="118" y="40" width="10" height="10" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.8"/>
+  <line x1="123" y1="40" x2="123" y2="38" stroke="#4aaa84" stroke-width="0.8"/>
+</g>
+<g opacity="0.9"><!-- conquered -->
+  <rect x="260" y="32" width="10" height="10" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.8"/>
+  <line x1="265" y1="32" x2="265" y2="30" stroke="#4aaa84" stroke-width="0.8"/>
+</g>
+<g opacity="0.9"><!-- conquered -->
+  <rect x="370" y="80" width="10" height="10" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.8"/>
+  <line x1="375" y1="80" x2="375" y2="78" stroke="#4aaa84" stroke-width="0.8"/>
+</g>
+<g opacity="0.6"><!-- unconquered -->
+  <rect x="340" y="155" width="10" height="10" rx="1" fill="#1a2a1a" stroke="#3a6a3a" stroke-width="0.8"/>
+  <line x1="345" y1="155" x2="345" y2="153" stroke="#3a6a3a" stroke-width="0.8"/>
+</g>
+<g opacity="0.6"><!-- unconquered -->
+  <rect x="95" y="160" width="10" height="10" rx="1" fill="#1a2a1a" stroke="#3a6a3a" stroke-width="0.8"/>
+  <line x1="100" y1="160" x2="100" y2="158" stroke="#3a6a3a" stroke-width="0.8"/>
+</g>
+
+<!-- ============ FINANCE TERRITORY — east, large ============ -->
+<path d="M390,195 L420,175 L430,255 L428,330 L420,400 L395,430 L355,442 L310,440 L280,420 L265,388 L268,330 L275,270 L295,230 L330,215 L365,210 Z"
+  fill="#2a1414" stroke="#7a2a2a" stroke-width="1.2"/>
+<!-- conquest overlay — 20% -->
+<path d="M390,195 L420,175 L430,255 L425,290 L405,300 L375,295 L350,278 L338,250 L342,225 L365,210 Z"
+  fill="#8b2020" opacity="0.1"/>
+<path d="M390,195 L420,175 L430,255 L425,290 L405,300 L375,295 L350,278 L338,250 L342,225 L365,210 Z"
+  fill="none" stroke="#8b2020" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.4"/>
+<text x="352" y="318" text-anchor="middle" fill="#c43030" font-family="'Cinzel',serif" font-size="13" font-weight="bold" letter-spacing="0.06em">FINANCE</text>
+<text x="352" y="334" text-anchor="middle" fill="#7a2020" font-family="'Crimson Text',serif" font-size="10" font-style="italic">treasury — 20% held</text>
+<!-- finance milestones — 5 -->
+<g opacity="0.8">
+  <rect x="398" y="210" width="9" height="9" rx="1" fill="#8b2020" stroke="#c43030" stroke-width="0.8"/>
+  <line x1="402" y1="210" x2="402" y2="208" stroke="#c43030" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="412" y="280" width="9" height="9" rx="1" fill="#1a0a0a" stroke="#6a2020" stroke-width="0.8"/>
+  <line x1="416" y1="280" x2="416" y2="278" stroke="#6a2020" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="400" y="350" width="9" height="9" rx="1" fill="#1a0a0a" stroke="#6a2020" stroke-width="0.8"/>
+  <line x1="404" y1="350" x2="404" y2="348" stroke="#6a2020" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="356" y="405" width="9" height="9" rx="1" fill="#1a0a0a" stroke="#6a2020" stroke-width="0.8"/>
+  <line x1="360" y1="405" x2="360" y2="403" stroke="#6a2020" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="278" y="350" width="9" height="9" rx="1" fill="#1a0a0a" stroke="#6a2020" stroke-width="0.8"/>
+  <line x1="282" y1="350" x2="282" y2="348" stroke="#6a2020" stroke-width="0.8"/>
+</g>
+
+<!-- RIVER east side -->
+<path d="M385,210 C370,245 355,280 345,320 C335,355 330,390 325,420" fill="none" stroke="#0f1e2a" stroke-width="2.5" opacity="0.7"/>
+<path d="M385,210 C370,245 355,280 345,320 C335,355 330,390 325,420" fill="none" stroke="#162840" stroke-width="1.2" opacity="0.5"/>
+
+<!-- ============ PHYSICAL TERRITORY — west, medium ============ -->
+<path d="M18,180 L55,175 L90,200 L110,235 L115,280 L105,325 L80,355 L45,368 L18,352 L8,310 L8,255 L12,215 Z"
+  fill="#162418" stroke="#2a6a4a" stroke-width="1.2"/>
+<!-- conquest overlay — 75% thriving -->
+<path d="M18,180 L55,175 L90,200 L110,235 L112,268 L100,300 L78,328 L48,342 L20,335 L10,300 L9,258 L12,215 Z"
+  fill="#2d7a5e" opacity="0.1"/>
+<path d="M18,180 L55,175 L90,200 L110,235 L112,268 L100,300 L78,328 L48,342 L20,335 L10,300 L9,258 L12,215 Z"
+  fill="none" stroke="#2d7a5e" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.5"/>
+<text x="62" y="265" text-anchor="middle" fill="#4aaa84" font-family="'Cinzel',serif" font-size="11" font-weight="bold" letter-spacing="0.05em">PHYSICAL</text>
+<text x="62" y="280" text-anchor="middle" fill="#1d7a54" font-family="'Crimson Text',serif" font-size="9" font-style="italic">75% held</text>
+<!-- physical milestones — 4 -->
+<g opacity="0.9">
+  <rect x="28" y="200" width="9" height="9" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.8"/>
+  <line x1="32" y1="200" x2="32" y2="198" stroke="#4aaa84" stroke-width="0.8"/>
+</g>
+<g opacity="0.9">
+  <rect x="88" y="220" width="9" height="9" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.8"/>
+  <line x1="92" y1="220" x2="92" y2="218" stroke="#4aaa84" stroke-width="0.8"/>
+</g>
+<g opacity="0.9">
+  <rect x="96" y="285" width="9" height="9" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.8"/>
+  <line x1="100" y1="285" x2="100" y2="283" stroke="#4aaa84" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="42" y="335" width="9" height="9" rx="1" fill="#162418" stroke="#2a6a4a" stroke-width="0.8"/>
+  <line x1="46" y1="335" x2="46" y2="333" stroke="#2a6a4a" stroke-width="0.8"/>
+</g>
+
+<!-- ============ SKILLS TERRITORY — south-west, medium ============ -->
+<path d="M12,355 L45,368 L80,355 L115,362 L140,385 L148,430 L140,475 L115,508 L80,522 L45,518 L18,498 L8,460 L8,410 Z"
+  fill="#181828" stroke="#3a3a7a" stroke-width="1"/>
+<!-- conquest 40% -->
+<path d="M12,355 L45,368 L80,355 L110,365 L130,388 L135,415 L122,440 L95,455 L62,458 L32,445 L14,420 L10,392 Z"
+  fill="#4a4a9a" opacity="0.08"/>
+<path d="M12,355 L45,368 L80,355 L110,365 L130,388 L135,415 L122,440 L95,455 L62,458 L32,445 L14,420 L10,392 Z"
+  fill="none" stroke="#5a5a9a" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.4"/>
+<text x="78" y="425" text-anchor="middle" fill="#6a6aaa" font-family="'Cinzel',serif" font-size="11" font-weight="bold" letter-spacing="0.05em">SKILLS</text>
+<text x="78" y="438" text-anchor="middle" fill="#3a3a6a" font-family="'Crimson Text',serif" font-size="9" font-style="italic">40% held</text>
+<!-- skills milestones -->
+<g opacity="0.8">
+  <rect x="22" y="375" width="8" height="8" rx="1" fill="#4a4a9a" stroke="#6a6aaa" stroke-width="0.8"/>
+  <line x1="26" y1="375" x2="26" y2="373" stroke="#6a6aaa" stroke-width="0.8"/>
+</g>
+<g opacity="0.8">
+  <rect x="108" y="378" width="8" height="8" rx="1" fill="#4a4a9a" stroke="#6a6aaa" stroke-width="0.8"/>
+  <line x1="112" y1="378" x2="112" y2="376" stroke="#6a6aaa" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="118" y="438" width="8" height="8" rx="1" fill="#181828" stroke="#3a3a6a" stroke-width="0.8"/>
+  <line x1="122" y1="438" x2="122" y2="436" stroke="#3a3a6a" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="18" y="458" width="8" height="8" rx="1" fill="#181828" stroke="#3a3a6a" stroke-width="0.8"/>
+  <line x1="22" y1="458" x2="22" y2="456" stroke="#3a3a6a" stroke-width="0.8"/>
+</g>
+
+<!-- MAIN RIVER — flows centre -->
+<path d="M210,218 C208,260 205,300 200,340 C196,375 190,410 185,450" fill="none" stroke="#0f1e2a" stroke-width="3" opacity="0.8"/>
+<path d="M210,218 C208,260 205,300 200,340 C196,375 190,410 185,450" fill="none" stroke="#162840" stroke-width="1.5" opacity="0.5"/>
+
+<!-- ============ LEARNING TERRITORY — south-east, medium ============ -->
+<path d="M265,388 L280,420 L310,440 L355,442 L390,430 L415,445 L420,490 L400,530 L360,555 L310,568 L268,565 L245,545 L238,505 L240,462 L248,430 Z"
+  fill="#181828" stroke="#3a3a7a" stroke-width="1"/>
+<!-- conquest 35% -->
+<path d="M265,388 L280,420 L310,440 L345,440 L375,430 L388,445 L390,470 L370,490 L335,498 L300,495 L272,478 L260,455 L255,430 Z"
+  fill="#4a4a9a" opacity="0.08"/>
+<path d="M265,388 L280,420 L310,440 L345,440 L375,430 L388,445 L390,470 L370,490 L335,498 L300,495 L272,478 L260,455 L255,430 Z"
+  fill="none" stroke="#5a5a9a" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.4"/>
+<text x="330" y="492" text-anchor="middle" fill="#6a6aaa" font-family="'Cinzel',serif" font-size="11" font-weight="bold" letter-spacing="0.05em">LEARNING</text>
+<text x="330" y="505" text-anchor="middle" fill="#3a3a6a" font-family="'Crimson Text',serif" font-size="9" font-style="italic">35% held</text>
+<!-- learning milestones -->
+<g opacity="0.8">
+  <rect x="272" y="408" width="8" height="8" rx="1" fill="#4a4a9a" stroke="#6a6aaa" stroke-width="0.8"/>
+  <line x1="276" y1="408" x2="276" y2="406" stroke="#6a6aaa" stroke-width="0.8"/>
+</g>
+<g opacity="0.8">
+  <rect x="360" y="448" width="8" height="8" rx="1" fill="#4a4a9a" stroke="#6a6aaa" stroke-width="0.8"/>
+  <line x1="364" y1="448" x2="364" y2="446" stroke="#6a6aaa" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="400" y="495" width="8" height="8" rx="1" fill="#181828" stroke="#3a3a6a" stroke-width="0.8"/>
+  <line x1="404" y1="495" x2="404" y2="493" stroke="#3a3a6a" stroke-width="0.8"/>
+</g>
+<g opacity="0.4">
+  <rect x="340" y="535" width="8" height="8" rx="1" fill="#181828" stroke="#3a3a6a" stroke-width="0.8"/>
+  <line x1="344" y1="535" x2="344" y2="533" stroke="#3a3a6a" stroke-width="0.8"/>
+</g>
+
+<!-- ============ RELATIONSHIPS TERRITORY — south-centre ============ -->
+<path d="M148,430 L185,450 L200,480 L198,525 L180,558 L150,578 L115,580 L85,565 L72,535 L80,498 L80,460 L115,450 Z"
+  fill="#281820" stroke="#6a3a5a" stroke-width="1"/>
+<!-- conquest 15% -->
+<path d="M148,430 L180,448 L192,468 L188,490 L165,500 L138,498 L115,488 L102,468 L108,450 L132,440 Z"
+  fill="#8a3a6a" opacity="0.1"/>
+<path d="M148,430 L180,448 L192,468 L188,490 L165,500 L138,498 L115,488 L102,468 L108,450 L132,440 Z"
+  fill="none" stroke="#8a3a6a" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.4"/>
+<text x="138" y="528" text-anchor="middle" fill="#c47a9a" font-family="'Cinzel',serif" font-size="10" font-weight="bold" letter-spacing="0.04em">RELATIONS</text>
+<text x="138" y="540" text-anchor="middle" fill="#7a3a5a" font-family="'Crimson Text',serif" font-size="9" font-style="italic">15% held</text>
+<!-- relationships milestones -->
+<g opacity="0.6">
+  <rect x="148" y="448" width="8" height="8" rx="1" fill="#8a3a6a" stroke="#c47a9a" stroke-width="0.8"/>
+  <line x1="152" y1="448" x2="152" y2="446" stroke="#c47a9a" stroke-width="0.8"/>
+</g>
+<g opacity="0.3">
+  <rect x="178" y="500" width="8" height="8" rx="1" fill="#281820" stroke="#5a2a4a" stroke-width="0.8"/>
+  <line x1="182" y1="500" x2="182" y2="498" stroke="#5a2a4a" stroke-width="0.8"/>
+</g>
+<g opacity="0.3">
+  <rect x="88" y="510" width="8" height="8" rx="1" fill="#281820" stroke="#5a2a4a" stroke-width="0.8"/>
+  <line x1="92" y1="510" x2="92" y2="508" stroke="#5a2a4a" stroke-width="0.8"/>
+</g>
+
+<!-- ============ NETWORKING TERRITORY — far south ============ -->
+<path d="M198,525 L240,505 L268,510 L295,530 L310,568 L295,595 L250,608 L200,610 L160,605 L145,588 L145,562 L150,540 L165,528 Z"
+  fill="#222218" stroke="#5a5a2a" stroke-width="1"/>
+<!-- conquest 10% -->
+<path d="M198,525 L228,518 L252,522 L265,535 L262,552 L245,560 L218,560 L198,550 L192,538 Z"
+  fill="#8a8a2a" opacity="0.1"/>
+<path d="M198,525 L228,518 L252,522 L265,535 L262,552 L245,560 L218,560 L198,550 L192,538 Z"
+  fill="none" stroke="#8a8a2a" stroke-width="0.6" stroke-dasharray="4,3" opacity="0.3"/>
+<text x="228" y="572" text-anchor="middle" fill="#aaaa5a" font-family="'Cinzel',serif" font-size="10" font-weight="bold" letter-spacing="0.04em">NETWORKING</text>
+<text x="228" y="583" text-anchor="middle" fill="#6a6a2a" font-family="'Crimson Text',serif" font-size="9" font-style="italic">10% held</text>
+<!-- networking milestones -->
+<g opacity="0.5">
+  <rect x="198" y="533" width="7" height="7" rx="1" fill="#6a6a2a" stroke="#aaaa5a" stroke-width="0.7"/>
+  <line x1="201" y1="533" x2="201" y2="531" stroke="#aaaa5a" stroke-width="0.7"/>
+</g>
+<g opacity="0.3">
+  <rect x="262" y="545" width="7" height="7" rx="1" fill="#222218" stroke="#4a4a1a" stroke-width="0.7"/>
+  <line x1="265" y1="545" x2="265" y2="543" stroke="#4a4a1a" stroke-width="0.7"/>
+</g>
+<g opacity="0.3">
+  <rect x="165" y="558" width="7" height="7" rx="1" fill="#222218" stroke="#4a4a1a" stroke-width="0.7"/>
+  <line x1="168" y1="558" x2="168" y2="556" stroke="#4a4a1a" stroke-width="0.7"/>
+</g>
+
+<!-- ============ CITADEL — tiny fortress at centre ============ -->
+<g transform="translate(192,222)">
+  <!-- outer walls tiny -->
+  <polygon points="18,0 36,8 36,28 18,36 0,28 0,8" fill="#1e1a08" stroke="#c9a84c" stroke-width="1.5"/>
+  <!-- inner keep -->
+  <rect x="10" y="10" width="16" height="16" rx="1" fill="#2a2210" stroke="#c9a84c" stroke-width="0.8"/>
+  <!-- towers -->
+  <rect x="5" y="4" width="6" height="6" fill="#1e1a08" stroke="#c9a84c" stroke-width="0.8"/>
+  <rect x="25" y="4" width="6" height="6" fill="#1e1a08" stroke="#c9a84c" stroke-width="0.8"/>
+  <rect x="5" y="26" width="6" height="6" fill="#1e1a08" stroke="#c9a84c" stroke-width="0.8"/>
+  <rect x="25" y="26" width="6" height="6" fill="#1e1a08" stroke="#c9a84c" stroke-width="0.8"/>
+  <!-- flag -->
+  <line x1="18" y1="10" x2="18" y2="2" stroke="#c9a84c" stroke-width="0.8"/>
+  <polygon points="18,2 24,4 18,6" fill="#c9a84c"/>
+  <text x="18" y="52" text-anchor="middle" fill="#c9a84c" font-family="'Cinzel',serif" font-size="8" letter-spacing="0.08em">CITADEL</text>
+</g>
+
+<!-- roads from citadel -->
+<path d="M210,222 C210,180 210,140 210,80" fill="none" stroke="#2a2418" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.5"/>
+<path d="M228,240 C260,260 290,280 320,300" fill="none" stroke="#2a2418" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.5"/>
+<path d="M192,240 C160,260 130,270 100,270" fill="none" stroke="#2a2418" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.5"/>
+<path d="M205,258 C200,300 196,340 190,380" fill="none" stroke="#2a2418" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.5"/>
+<path d="M218,255 C240,300 255,340 260,380" fill="none" stroke="#2a2418" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.5"/>
+
+<!-- COMPASS ROSE -->
+<g transform="translate(390,560)">
+  <circle cx="0" cy="0" r="16" fill="#110e08" stroke="#2a2418" stroke-width="0.8"/>
+  <polygon points="0,-12 2.5,-4 0,-7 -2.5,-4" fill="#c9a84c"/>
+  <polygon points="0,12 2.5,4 0,7 -2.5,4" fill="#4a3a28"/>
+  <polygon points="-12,0 -4,2.5 -7,0 -4,-2.5" fill="#4a3a28"/>
+  <polygon points="12,0 4,2.5 7,0 4,-2.5" fill="#4a3a28"/>
+  <text x="0" y="-15" text-anchor="middle" fill="#c9a84c" font-family="'Cinzel',serif" font-size="7">N</text>
+</g>
+
+<!-- milestone key bottom left -->
+<g transform="translate(15,562)">
+  <rect x="0" y="0" width="7" height="7" rx="1" fill="#2d7a5e" stroke="#4aaa84" stroke-width="0.7"/>
+  <text x="10" y="7" fill="#5a4a38" font-family="'Crimson Text',serif" font-size="8">conquered</text>
+  <rect x="0" y="12" width="7" height="7" rx="1" fill="#161210" stroke="#4a4030" stroke-width="0.7"/>
+  <text x="10" y="19" fill="#5a4a38" font-family="'Crimson Text',serif" font-size="8">unconquered</text>
+</g>
+
+</svg>
+</div>
+
+<div class="legend">
+  <div class="legend-row"><div class="legend-dot" style="background:#2d7a5e;border:1px solid #4aaa84"></div> Thriving</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#b8760a;border:1px solid #e09a20"></div> Holding</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#8b2020;border:1px solid #c43030"></div> Under threat</div>
+  <div class="legend-row"><div class="legend-dot" style="background:#2a2010;border:1px solid #c9a84c"></div> Citadel</div>
+</div>
+
+<script>
+  const d = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('status-date').textContent = 'Status as of ' + d.toLocaleDateString('en-GB', opts);
+</script>
+</body>
+</html>

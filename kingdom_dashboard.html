@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kingdom of Bilal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #1a1410;
+    --parchment-mid: #241c14;
+    --parchment-light: #2e2418;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #7a6530;
+    --crimson: #8b2020;
+    --crimson-light: #c43030;
+    --teal-deep: #1a4a3a;
+    --teal: #2d7a5e;
+    --teal-light: #4aaa84;
+    --amber: #b8760a;
+    --amber-light: #e09a20;
+    --stone: #5a4f3e;
+    --stone-light: #8a7a68;
+    --text-primary: #e8dcc8;
+    --text-secondary: #a89880;
+    --text-dim: #6a5c48;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.45);
+  }
+
+  html { background: var(--parchment); }
+
+  body {
+    font-family: 'Crimson Text', Georgia, serif;
+    background: var(--parchment);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0 0 80px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--parchment-mid);
+    border-bottom: 1px solid var(--border-strong);
+    padding: 28px 20px 20px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .header-sub {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  .header-date {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* OVERALL STATUS BAR */
+  .status-bar {
+    background: var(--parchment-light);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-item {
+    text-align: center;
+    flex: 1;
+  }
+
+  .status-item + .status-item {
+    border-left: 1px solid var(--border);
+  }
+
+  .status-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 3px;
+  }
+
+  .status-value {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  .status-value.threat { color: var(--crimson-light); }
+  .status-value.holding { color: var(--amber-light); }
+  .status-value.thriving { color: var(--teal-light); }
+
+  /* SECTION HEADERS */
+  .section {
+    padding: 0 16px;
+    margin-top: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .section-desc {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  /* CITADEL PILLARS */
+  .pillar {
+    background: var(--parchment-mid);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .pillar.thriving::before { background: var(--teal); }
+  .pillar.holding::before { background: var(--amber); }
+  .pillar.threat::before { background: var(--crimson); }
+  .pillar.critical::before { background: var(--crimson-light); }
+  .pillar.aspirational::before { background: var(--stone-light); }
+
+  .pillar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .pillar-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+  }
+
+  .pillar-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  .badge-thriving { background: rgba(45,122,94,0.25); color: var(--teal-light); border: 1px solid rgba(45,122,94,0.4); }
+  .badge-holding { background: rgba(184,118,10,0.25); color: var(--amber-light); border: 1px solid rgba(184,118,10,0.4); }
+  .badge-threat { background: rgba(139,32,32,0.25); color: var(--crimson-light); border: 1px solid rgba(139,32,32,0.4); }
+  .badge-aspirational { background: rgba(90,79,62,0.25); color: var(--stone-light); border: 1px solid rgba(90,79,62,0.4); }
+
+  .pillar-flavour {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .pillar-bar-wrap {
+    height: 5px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .pillar-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+
+  .bar-thriving { background: var(--teal); }
+  .bar-holding { background: var(--amber); }
+  .bar-threat { background: var(--crimson); }
+  .bar-aspirational { background: var(--stone-light); }
+
+  .pillar-streak {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .pillar-warning {
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: rgba(139,32,32,0.15);
+    border: 1px solid rgba(139,32,32,0.3);
+    border-radius: 4px;
+    font-family: 'Crimson Text', serif;
+    font-size: 12px;
+    color: var(--crimson-light);
+    font-style: italic;
+  }
+
+  /* TERRITORY CARDS */
+  .territory {
+    background: var(--parchment-mid);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .territory::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .territory.thriving::before { background: var(--teal); }
+  .territory.holding::before { background: var(--amber); }
+  .territory.threat::before { background: var(--crimson); }
+
+  .territory-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .territory-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+  }
+
+  .territory-wealth {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .territory-bar-wrap {
+    height: 5px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .territory-bar {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  .territory-tasks {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  /* BATTLE BUTTON */
+  .battle-section {
+    padding: 24px 16px 0;
+  }
+
+  .battle-btn {
+    width: 100%;
+    background: var(--crimson);
+    border: 1px solid var(--crimson-light);
+    border-radius: 6px;
+    padding: 18px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s;
+  }
+
+  .battle-btn:active { background: var(--crimson-light); }
+
+  .battle-btn-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .battle-btn-sub {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ADVISER NOTE */
+  .adviser {
+    margin: 20px 16px 0;
+    background: var(--parchment-light);
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .adviser-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 8px;
+  }
+
+  .adviser-text {
+    font-family: 'Crimson Text', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .adviser-priority {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-family: 'Crimson Text', serif;
+    font-size: 14px;
+    color: var(--gold);
+  }
+
+  .divider {
+    text-align: center;
+    color: var(--gold-dim);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    margin: 6px 0 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-bar, .territory-bar { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Kingdom of</div>
+  <div class="header-title">Bilal ibn &#8212;</div>
+  <div class="header-sub">Abd of Allah &middot; Warrior &middot; On his way to Jannah</div>
+  <div class="header-date" id="today-date"></div>
+</div>
+
+<div class="status-bar">
+  <div class="status-item">
+    <div class="status-label">Citadel</div>
+    <div class="status-value holding">Holding</div>
+  </div>
+  <div class="status-item">
+    <div class="status-label">Kingdom</div>
+    <div class="status-value threat">Rebuilding</div>
+  </div>
+  <div class="status-item">
+    <div class="status-label">Day streak</div>
+    <div class="status-value">&#8212;</div>
+  </div>
+</div>
+
+<!-- ADVISER NOTE -->
+<div class="adviser">
+  <div class="adviser-label">Adviser's briefing</div>
+  <div class="adviser-text">"The army is rebuilding from the ashes. The Citadel holds but is not yet fortified. One battle at a time, my lord."</div>
+  <div class="adviser-priority">&#x2192; Today's one thing: R&amp;D tax claim. One hour. You know what to do.</div>
+</div>
+
+<!-- CITADEL -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">The Citadel</span>
+    <span class="section-desc">Army health</span>
+  </div>
+
+  <div class="divider">&#10022; &#10022; &#10022;</div>
+
+  <div class="pillar critical">
+    <div class="pillar-top">
+      <div class="pillar-name">Fajr on time</div>
+      <span class="pillar-badge badge-threat">Critical</span>
+    </div>
+    <div class="pillar-flavour">Miss it — army loses 50%. Do it — battle-ready.</div>
+    <div class="pillar-bar-wrap"><div class="pillar-bar bar-threat" style="width:30%"></div></div>
+    <div class="pillar-streak">2 of 7 days this week</div>
+    <div class="pillar-warning">The commander has not woken at dawn. The army waits.</div>
+  </div>
+
+  <div class="pillar holding">
+    <div class="pillar-top">
+      <div class="pillar-name">Morning &amp; evening athkar</div>
+      <span class="pillar-badge badge-holding">Holding</span>
+    </div>
+    <div class="pillar-flavour">Defences raised. Camp protected from attack.</div>
+    <div class="pillar-bar-wrap"><div class="pillar-bar bar-holding" style="width:57%"></div></div>
+    <div class="pillar-streak">4 of 7 days this week</div>
+  </div>
+
+  <div class="pillar holding">
+    <div class="pillar-top">
+      <div class="pillar-name">Quran daily</div>
+      <span class="pillar-badge badge-holding">Holding</span>
+    </div>
+    <div class="pillar-flavour">Reinforcements arrive. Good deeds resupply the army.</div>
+    <div class="pillar-bar-wrap"><div class="pillar-bar bar-holding" style="width:57%"></div></div>
+    <div class="pillar-streak">4 of 7 days this week</div>
+  </div>
+
+  <div class="pillar thriving">
+    <div class="pillar-top">
+      <div class="pillar-name">Knowing Allah</div>
+      <span class="pillar-badge badge-thriving">Thriving</span>
+    </div>
+    <div class="pillar-flavour">Troop morale rises. Purpose revealed. New land unlocked.</div>
+    <div class="pillar-bar-wrap"><div class="pillar-bar bar-thriving" style="width:85%"></div></div>
+    <div class="pillar-streak">6 of 7 days this week</div>
+  </div>
+
+  <div class="pillar aspirational">
+    <div class="pillar-top">
+      <div class="pillar-name">Tahajjud</div>
+      <span class="pillar-badge badge-aspirational">Aspirational</span>
+    </div>
+    <div class="pillar-flavour">Elite units. Build toward this — not yet required.</div>
+    <div class="pillar-bar-wrap"><div class="pillar-bar bar-aspirational" style="width:10%"></div></div>
+    <div class="pillar-streak">Not yet active</div>
+  </div>
+
+  <div class="pillar holding">
+    <div class="pillar-top">
+      <div class="pillar-name">Salah al-Duha</div>
+      <span class="pillar-badge badge-holding">Holding</span>
+    </div>
+    <div class="pillar-flavour">Morning training. Builds troop strength through the day.</div>
+    <div class="pillar-bar-wrap"><div class="pillar-bar bar-holding" style="width:43%"></div></div>
+    <div class="pillar-streak">3 of 7 days this week</div>
+  </div>
+</div>
+
+<!-- KINGDOM MAP -->
+<div class="section" style="margin-top:28px">
+  <div class="section-header">
+    <span class="section-title">Kingdom Map</span>
+    <span class="section-desc">External conquest</span>
+  </div>
+
+  <div class="divider">&#10022; &#10022; &#10022;</div>
+
+  <div class="territory holding">
+    <div class="territory-top">
+      <div class="territory-name">Work</div>
+      <span class="pillar-badge badge-holding">Holding</span>
+    </div>
+    <div class="territory-wealth">Wealth: income flows to the kingdom</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-holding" style="width:55%"></div></div>
+    <div class="territory-tasks">3 tasks completed this week</div>
+  </div>
+
+  <div class="territory threat">
+    <div class="territory-top">
+      <div class="territory-name">Finance</div>
+      <span class="pillar-badge badge-threat">Under threat</span>
+    </div>
+    <div class="territory-wealth">Wealth: treasury &amp; siege capacity</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-threat" style="width:20%"></div></div>
+    <div class="territory-tasks">R&amp;D claim pending. Savings bleeding.</div>
+  </div>
+
+  <div class="territory holding">
+    <div class="territory-top">
+      <div class="territory-name">Skills</div>
+      <span class="pillar-badge badge-holding">Holding</span>
+    </div>
+    <div class="territory-wealth">Wealth: stronger units, new abilities</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-holding" style="width:50%"></div></div>
+    <div class="territory-tasks">2 tasks completed this week</div>
+  </div>
+
+  <div class="territory holding">
+    <div class="territory-top">
+      <div class="territory-name">Learning</div>
+      <span class="pillar-badge badge-holding">Holding</span>
+    </div>
+    <div class="territory-wealth">Wealth: fog of war cleared, map revealed</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-holding" style="width:45%"></div></div>
+    <div class="territory-tasks">2 tasks completed this week</div>
+  </div>
+
+  <div class="territory thriving">
+    <div class="territory-top">
+      <div class="territory-name">Physical</div>
+      <span class="pillar-badge badge-thriving">Thriving</span>
+    </div>
+    <div class="territory-wealth">Wealth: troop endurance &amp; battle fitness</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-thriving" style="width:80%"></div></div>
+    <div class="territory-tasks">BJJ &amp; wrestling — consistent</div>
+  </div>
+
+  <div class="territory threat">
+    <div class="territory-top">
+      <div class="territory-name">Relationships</div>
+      <span class="pillar-badge badge-threat">Under threat</span>
+    </div>
+    <div class="territory-wealth">Wealth: allies recruited, coalition strength</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-threat" style="width:25%"></div></div>
+    <div class="territory-tasks">0 tasks this week</div>
+  </div>
+
+  <div class="territory threat">
+    <div class="territory-top">
+      <div class="territory-name">Networking</div>
+      <span class="pillar-badge badge-threat">Under threat</span>
+    </div>
+    <div class="territory-wealth">Wealth: scouts deployed, intelligence gathered</div>
+    <div class="territory-bar-wrap"><div class="territory-bar bar-threat" style="width:15%"></div></div>
+    <div class="territory-tasks">0 tasks this week</div>
+  </div>
+</div>
+
+<!-- BATTLE BUTTON -->
+<div class="battle-section">
+  <a class="battle-btn" href="https://claude.ai" target="_blank">
+    <div class="battle-btn-title">&#9876; Under attack — call the adviser</div>
+    <div class="battle-btn-sub">Tap to open Claude &middot; Ramble &middot; Regroup &middot; Return</div>
+  </a>
+</div>
+
+<script>
+  const d = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('today-date').textContent = d.toLocaleDateString('en-GB', opts).toUpperCase();
+</script>
+
+</body>
+</html>
